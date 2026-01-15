@@ -38,3 +38,9 @@ To maintain environment consistency and minimize deployment risk, the platform u
 1. **Check the Task Log:** Look for "Variable Substitution" errors (most common).
 2. **Verify Tentacle Health:** Ensure the target App Service or Server is communicating with the Octopus server.
 3. **Manual Intervention:** If a release hangs, check the "Guided Failure" logs to see if a specific SQL migration script blocked the release.
+
+## 5. Observability & Synthetic Monitoring (Future Roadmap)
+To shift from reactive to proactive support, the platform strategy includes:
+* **Synthetic Transactions:** Utilizing Selenium-based scripts to emulate end-to-end user journeys (Login -> Loan Submission).
+* **Observability with NRQL:** Transitioning KQL query logic to New Relic (NRQL) to monitor Real-User Monitoring (RUM) and backend transaction health.
+* **Proactive Alerting:** Configuring alerts based on "Synthetic Failures" to resolve issues before they impact real users.
