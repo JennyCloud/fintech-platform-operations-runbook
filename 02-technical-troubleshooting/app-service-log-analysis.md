@@ -23,6 +23,17 @@ dependencies | where success == false or duration > 5000 | summarize count(), av
 * **Diagnose and Solve Problems:** Use this built-in Azure tool to check for "Memory Thrashing" (the memory leak pattern) or "TCP Socket Exhaustion."
 * **Log Stream:** For real-time troubleshooting, use the Log Stream to see stdout and stderr logs as errors occur.
 
-## 4. Performance "Anti-Patterns" to Watch For
-* **The "Sawtooth" Pattern:** Steady memory growth followed by a crash/restart (Classic Memory Leak).
-* **Dependency Timeout:** When a 3rd party API (like a credit check service) is down, causing the Inovatec app to hang.
+## 4. SLA Watch: Identifying 5xx Server Errors
+In a Fintech environment, 5xx errors are the highest priority as they indicate platform instability.
+
+**KQL Query to find 500-level failures:**
+
+requests
+| where toint(resultCode) >= 500
+| summarize count() by resultCode, operation_Name, bin(timestamp, 15m)
+| render timechart
+
+What this tells you:
+500 (Internal Server Error): Code-level crash. Check the exceptions table for the stack trace.
+502 (Bad Gateway): The App Service might be down or restarting (check Deployment logs in Octopus).
+504 (Gateway Timeout): A dependency (SQL or API) is taking too long.
